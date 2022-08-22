@@ -1,0 +1,41 @@
+{
+  "name": "mern-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "server": "nodemon app.js",
+    "client": "npm run start --prefix ../client",
+    "dev": "cross-env NODE_ENV=development concurrently \"npm run server\" \"npm run client\""
+  },
+  "keywords": [
+    "mern",
+    "react",
+    "ts"
+  ],
+  "author": "Ekaterina Fedoseeva",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.0",
+    "config": "^3.3.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-fileupload": "^1.4.0",
+    "express-validator": "^6.14.2",
+    "gridfs-stream": "^1.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.4.0",
+    "multer": "^1.4.4",
+    "multer-gridfs-storage": "^5.0.2",
+    "streamifier": "^0.1.1"
+  },
+  "devDependencies": {
+    "concurrently": "^7.2.2",
+    "cross-env": "^7.0.3",
+    "nodemon": "^2.0.16"
+  }
+}
