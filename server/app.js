@@ -3,8 +3,6 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import streamifier from 'streamifier';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 import userRouter from './routes/user.routes.js';
 import eventRouter from './routes/event.routes.js';
 
@@ -13,8 +11,8 @@ import grid from 'gridfs-stream';
 import fileUpload from 'express-fileupload';
 import bodyParser from 'body-parser';
 import Event from './models/Event.js';
-import { paginatedResult } from './middleware/pagination.middleware.js';
 import User from './models/User.js';
+import { paginatedResult } from './middleware/pagination.middleware.js';
 
 const corsOptions = {
   origin: 'http://localhost:3000',
@@ -28,7 +26,6 @@ const PORT = process.env.PORT || 5000;
 let gfs;
 let bucket;
 
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -37,12 +34,16 @@ app.use(
     createParentPath: true,
   })
 );
-// app.use('/api/auth', authRouter);
 
 // GET USERS
-app.get('/users', async (req, res) => {
+app.get('/users', paginatedResult(User), (req, res) => {
+  res.json(res.paginatedResults);
+});
+
+// GET USER DATA (ID)
+app.get('/user/:id', async (req, res) => {
   try {
-    const userData = await User.find();
+    const userData = await User.findOne({ id: req.params.id }, { _id: 0 });
 
     res.status(200).json(userData);
   } catch (error) {
@@ -51,14 +52,8 @@ app.get('/users', async (req, res) => {
 });
 
 // GET EVENTS
-app.get('/events', async (req, res) => {
-  try {
-    const eventData = await Event.find();
-
-    res.status(200).json(eventData);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
+app.get('/events/all-events', paginatedResult(Event), (req, res) => {
+  res.json(res.paginatedResults);
 });
 
 // CREATE EVENT
@@ -72,11 +67,6 @@ app.post('/events/all-events', async (req, res) => {
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
-});
-
-// PAGINATION
-app.get('/events/all-events', paginatedResult(Event), (req, res) => {
-  res.json(res.paginatedResults);
 });
 
 // GET IMAGE

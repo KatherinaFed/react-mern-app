@@ -17,6 +17,7 @@ const EventItem = (props: EventI) => {
   return (
     <EventItemWrapper>
       <ItemCard
+            id={props.id}
             activity={props.activity}
             date={props.date}
             time={props.time}

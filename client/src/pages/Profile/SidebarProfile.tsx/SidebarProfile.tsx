@@ -14,6 +14,7 @@ import { NavLink } from 'react-router-dom';
 import SidebarProfileItem from './SidebarProfileItem/SidebarProfileItem';
 import { sidebarProfileList } from '../../../helpers/itemLists';
 import { useAppSelector } from '../../../hooks/hook';
+import Preloader from '../../../components/Preloader';
 
 type SidebarProfileProps = {
   id: string;
@@ -26,7 +27,11 @@ type SidebarProfileProps = {
 
 const SidebarProfile = () => {
   const { profile } = useAppSelector((state) => state.profile);
-  console.log(profile)
+
+  if (!profile) {
+    return <Preloader />;
+  }
+
   return (
     <SidebarProfileContainer>
       <div className="wrapper">
@@ -35,7 +40,7 @@ const SidebarProfile = () => {
             <img className="avatar" alt="profilePhoto" src={userImg} />
           </div>
           <div className="name-wrapper">
-            <p>Username</p>
+            <p>{profile.username}</p>
           </div>
         </ProfileInfo>
 
@@ -44,14 +49,14 @@ const SidebarProfile = () => {
             {/* тут можно сделать отдельный айтем, в пропсы которых будет приходить количество подписчиков */}
             <Followers>
               <div className="follower-item">
-                <p className="count">2</p>
+                <p className="count">{profile.followers.length}</p>
                 <p className="text">Followers</p>
               </div>
             </Followers>
 
             <Following>
               <div className="following-item">
-                <p className="count">5</p>
+                <p className="count">{profile.following.length}</p>
                 <p className="text">Following</p>
               </div>
             </Following>
@@ -60,7 +65,7 @@ const SidebarProfile = () => {
 
         <LinksInfo>
           <Item>
-            <NavLink to="" style={{ textDecoration: 'none', color: 'black' }}>
+            <NavLink to={`/user/${profile.id}/events`} style={{ textDecoration: 'none', color: 'black' }}>
               <div className="container-link">
                 <p>Events</p>
               </div>

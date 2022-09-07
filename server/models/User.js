@@ -5,10 +5,11 @@ const schemaUser = new Schema({
   id: String,
   username: String,
   location: String,
-  img: String,
+  avatar: String,
   sport: [String],
   followers: [Object],
   following: [Object],
+  events: [Object],
   contacts: Object,
 });
 

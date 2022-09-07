@@ -8,7 +8,7 @@ export const paginatedResult = (model) => {
 
     const results = {};
 
-    if (endIndex < await model.countDocuments().exec()) {
+    if (endIndex < (await model.countDocuments().exec())) {
       results.next = {
         page: page + 1,
         size,
@@ -23,8 +23,12 @@ export const paginatedResult = (model) => {
     }
 
     try {
-      results.results = await model.find().limit(size).skip(startIndex).exec();
-      results.eventsCount = await model.countDocuments().exec();
+      results.results = await model
+        .find({}, { _id: 0 })
+        .limit(size)
+        .skip(startIndex)
+        .exec();
+      results.totalCount = await model.countDocuments().exec();
       res.paginatedResults = results;
       next();
     } catch (error) {

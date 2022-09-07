@@ -1,13 +1,17 @@
+import { UserI } from './../users/usersSlice';
 import { createSlice } from '@reduxjs/toolkit';
-import { profile } from 'console';
+
+interface ProfileI {
+  profile: UserI,
+}
 
 const profileSlice = createSlice({
   name: 'profile',
   initialState: {
-    profile: null,
-  },
+    profile: {},
+  } as ProfileI,
   reducers: {
-    setProfile(state, action) {
+    setUserProfile(state, action) {
       return {
         ...state,
         profile: action.payload,
@@ -16,5 +20,5 @@ const profileSlice = createSlice({
   }
 });
 
-export const { setProfile } = profileSlice.actions;
+export const { setUserProfile } = profileSlice.actions;
 export default profileSlice.reducer;

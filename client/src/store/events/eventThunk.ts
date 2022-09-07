@@ -11,12 +11,12 @@ import {
 export const getEventsThunk = (page: number, pageSize: number) => async (dispatch: (arg: any) => void) => {
   dispatch(toggleIsFetching(true));
   dispatch(setCurrentPage(page));
-
+// debugger
   const response = await eventsAPI.getEvents(page, pageSize);
-  console.log('eventsCount: ', response.eventsCount)
+
   dispatch(toggleIsFetching(false));
   dispatch(setEvents(response.results));
-  dispatch(setTotalEventsCount(response.eventsCount));
+  dispatch(setTotalEventsCount(response.totalCount));
 };
 
 export const createEventThunk =
