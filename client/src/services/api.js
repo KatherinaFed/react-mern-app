@@ -1,7 +1,8 @@
 import * as axios from 'axios';
+import process from 'process';
 
 const instance = axios.create({
-  baseURL: process.env.API_URL,
+  baseURL: process.env.REACT_APP_API_URL,
   headers: {
     Authorization: `Bearer ${localStorage.getItem('token')}`,
   },
@@ -32,27 +33,36 @@ export const authAPI = {
 };
 
 // USERS
-// export const usersAPI = {
-
-// }
-
-// PROFILE
-export const profileAPI = {
-  getProfile(userId) {
-    return instance.get(`profile/${userId}`).then(({ data }) => data);
+export const usersAPI = {
+  getUsers(currentPage = 1, pageSize = 10) {
+    return instance
+      .get(`users?page=${currentPage}&size=${pageSize}`)
+      .then(({ data }) => {
+        return data;
+      });
+  },
+  getUserProfile(userId) {
+    return instance.get(`user/${userId}`).then(({ data }) => data);
   },
 };
+
+// PROFILE
+// export const profileAPI = {
+//   getProfile(userId) {
+//     return instance.get(`profile/${userId}`).then(({ data }) => data);
+//   },
+// };
 
 // EVENTS
 export const eventsAPI = {
   getEvents(currentPage = 1, pageSize = 10) {
-    return (
-      instance
-        .get(`events/all-events?page=${currentPage}&size=${pageSize}`)
-        .then(({ data }) => {
-          return data;
-        })
-    );
+    // debugger
+    return instance
+      .get(`events/all-events?page=${currentPage}&size=${pageSize}`)
+      .then(({ data }) => {
+        // console.log(data)
+        return data;
+      });
   },
   createEvent(event) {
     return instance.post('events/all-events', event).then(({ data }) => data);

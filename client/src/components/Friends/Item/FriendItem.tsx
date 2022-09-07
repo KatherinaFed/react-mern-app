@@ -12,29 +12,22 @@ import {
   Username,
 } from './styles';
 import { NavLink } from 'react-router-dom';
+import { UserI } from '../../../store/users/usersSlice';
 
-type FriendItemProps = {
-  id: string;
-  username: string;
-  followers: string;
-  following: string;
-  city: string;
-  img: string;
-};
-
-const FriendItem = (props: FriendItemProps) => {
+const FriendItem = (props: UserI) => {
+  console.log(props)
   return (
-    <NavLink to={`/profile/${props.id}`} style={{ textDecoration: 'none' }}>
+    <NavLink to={`/user/${props.id}`} style={{ textDecoration: 'none' }}>
       <FriendItemWrapper key={props.id}>
         <ImageWrapper>
-          <img src={props.img} alt="" className="img" />
+          <img src={props.avatar} alt="" className="img" />
         </ImageWrapper>
         <InfoItemWrapper>
           <Username>
             <p className="username-text">{props.username}</p>
           </Username>
           <City>
-            <p className="city-text">{props.city}</p>
+            <p className="city-text">{props.location}</p>
           </City>
         </InfoItemWrapper>
       </FriendItemWrapper>

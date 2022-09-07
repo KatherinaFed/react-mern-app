@@ -25,6 +25,7 @@ const LayoutRouting: React.FC = () => {
 
   const location = useLocation().pathname;
   const isFriends = location === '/friends';
+  const isUsers = location === '/users';
 
   return (
     <>
@@ -46,11 +47,18 @@ const LayoutRouting: React.FC = () => {
           >
             <p className="text">Friends</p>
           </NavLink>
+          <NavLink
+            to="/users"
+            style={({ isActive }) => (isActive ? activeButton : inactiveButton)}
+            className="navlink"
+          >
+            <p className="text">Users</p>
+          </NavLink>
         </div>
         {/* {isFriends && <Outlet />} */}
       </LayoutWrapper>
 
-      {!isFriends && (
+      {!isFriends && !isUsers ? (
         <LinksWrapper>
           <div className="filter-layout">
             <Links>
@@ -75,7 +83,7 @@ const LayoutRouting: React.FC = () => {
             </FilterContainer>
           </div>
         </LinksWrapper>
-      )}
+      ) : null}
       <Outlet />
     </>
   );

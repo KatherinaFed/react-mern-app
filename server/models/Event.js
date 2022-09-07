@@ -2,6 +2,7 @@ import pkg from 'mongoose';
 const { Schema, model } = pkg;
 
 const eventSchema = new Schema({
+  id: String,
   activity: {
     label: { type: String },
     value: { type: String },

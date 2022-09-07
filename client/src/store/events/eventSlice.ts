@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ReactNode } from 'react';
 
 type OptionType = {
   label: string;
@@ -7,7 +6,7 @@ type OptionType = {
 };
 
 export interface EventI {
-  // _id: string;
+  id: string;
   activity: OptionType | null;
   title: string;
   description: string;

@@ -1,6 +1,7 @@
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import Select from 'react-select';
+import _ from 'lodash';
 import { activityOptions, locationOptions } from '../../helpers/filterList';
 import { useAppDispatch } from '../../hooks/hook';
 import { createEventThunk } from '../../store/events/eventThunk';
@@ -26,6 +27,7 @@ type OptionType = {
 };
 
 interface ValueI {
+  id: string | null;
   activity: OptionType | null;
   title: string;
   description: string;
@@ -61,6 +63,7 @@ const ModalForm = ({ closeWindow }: PropsT) => {
 
   const { handleChange, handleSubmit, values } = useFormik({
     initialValues: {
+      id: null,
       activity: null,
       title: '',
       description: '',
@@ -73,10 +76,12 @@ const ModalForm = ({ closeWindow }: PropsT) => {
     onSubmit: (value: ValueI, { resetForm }) => {
       const timestampData = valueData && Math.round(valueData.getTime() / 1000);
       const timestampTime = valueTime && Math.round(valueTime.getTime() / 1000);
+      const id = _.uniqueId();
 
       dispatch(
         createEventThunk({
           ...value,
+          id,
           date: timestampData,
           time: timestampTime,
           activity: selectedActivity,

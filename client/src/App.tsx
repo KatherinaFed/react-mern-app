@@ -22,7 +22,9 @@ import { ModalProvider } from './hooks/useModal';
 import store from './store/store';
 import PastEvents from './pages/Profile/InfoProfile/ProfileEvents/Past/PastEvents';
 import UpcomingEvents from './pages/Profile/InfoProfile/ProfileEvents/Upcoming/UpcomingEvents';
-import UserProfile from './components/User/UserProfile';
+import UserProfile from './components/Users/UserProfile';
+import Users from './components/Users/Users';
+import UserEvents from './components/Users/UserEvents';
 
 function App() {
   // const { isAuth } = useAppSelector((state) => state.auth);
@@ -46,12 +48,14 @@ function App() {
 
         <Route path="/" element={<MainPage />}>
           <Route path="friends" element={<Friends />} />
+          <Route path="users" element={<Users />} />
         </Route>
 
-        <Route path="profile" element={<ProfilePage />}>
+        <Route path="user" element={<ProfilePage />}>
           <Route path=":id">
-            <Route path="past_events" element={<PastEvents />} />
-            <Route path="upcoming_events" element={<UpcomingEvents />} />
+            <Route path="events" element={<UserEvents />} />
+            {/* <Route path="past_events" element={<PastEvents />} />
+            <Route path="upcoming_events" element={<UpcomingEvents />} /> */}
           </Route>
         </Route>
 

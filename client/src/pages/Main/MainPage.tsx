@@ -8,7 +8,6 @@ import ModalForm from '../../components/Forms/ModalForm';
 import Modal from '../../components/Modals/Modal';
 
 const MainPage: React.FC = () => {
-  const { handleOpen, isOpen } = useModal();
   const [active, setActive] = useState(false);
 
   return (

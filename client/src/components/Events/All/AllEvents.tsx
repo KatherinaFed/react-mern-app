@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks/hook';
 import { getEventsThunk } from '../../../store/events/eventThunk';
 import Paginator from '../../Paginator/Paginator';

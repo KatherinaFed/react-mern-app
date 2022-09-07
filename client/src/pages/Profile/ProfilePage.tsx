@@ -9,13 +9,13 @@ import { ProfileContainer } from './styles';
 
 const ProfilePage = () => {
   const dispatch = useAppDispatch();
-  const { userId } = useAppSelector((state) => state.auth);
+  // const { userId } = useAppSelector((state) => state.auth);
 
   let id = useParams().id;
 
-  if (!id) {
-    id = userId;
-  }
+  // if (!id) {
+  //   id = userId;
+  // }
 
   useEffect(() => {
     dispatch(getProfileThunk(id));
