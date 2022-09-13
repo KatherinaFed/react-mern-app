@@ -24,7 +24,7 @@ export const paginatedResult = (model) => {
 
     try {
       results.results = await model
-        .find({}, { _id: 0 })
+        .find()
         .limit(size)
         .skip(startIndex)
         .exec();

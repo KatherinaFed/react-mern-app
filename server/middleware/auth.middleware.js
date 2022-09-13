@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import 'dotenv/config';
 
-module.exports = (req, res, next) => {
+const auth = (req, res, next) => {
   if (req.method === 'OPTIONS') {
     return next();
   }
@@ -19,3 +19,6 @@ module.exports = (req, res, next) => {
     return res.status(401).json({ message: 'Auth error' });
   }
 };
+
+// module.exports = auth;
+export default auth;

@@ -1,13 +1,15 @@
 import 'dotenv/config';
-const { Router } = require('express');
-const bcryptjs = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { check, validationResult } = require('express-validator');
-const User = require('../models/User');
-const authMiddleware = require('../middleware/auth.middleware');
-const router = new Router();
+import express from 'express';
+import bcryptjs from 'bcryptjs';
+import jwt from 'jsonwebtoken'
+import { check, validationResult } from 'express-validator';
+import { v4 as uuidv4 } from 'uuid';
+import User from '../models/User.js';
+import authMiddleware from '../middleware/auth.middleware.js';
 
-// api/auth/registration
+const router = express.Router();
+
+// SIGNUP
 router.post(
   '/signup',
   [
@@ -38,8 +40,18 @@ router.post(
           .json({ message: `User with email ${email} has already exist` });
       }
 
+      // ID for a new user
+      const userId = uuidv4();
+
       const hashPassword = await bcryptjs.hash(password, 8);
-      const newUser = new User({ username, email, password: hashPassword });
+      const newUser = new User({
+        id: userId,
+        username,
+        email,
+        password: hashPassword,
+      });
+
+      console.log('NEW USER: ', newUser)
 
       await newUser.save();
 
@@ -50,7 +62,7 @@ router.post(
   }
 );
 
-// api/auth/login
+// LOGIN
 router.post(
   '/login',
   [
@@ -98,6 +110,7 @@ router.post(
   }
 );
 
+// IS AUTH
 router.get('/me', authMiddleware, async (req, res) => {
   try {
     const user = await User.findOne({ id: req.user.id });
@@ -118,4 +131,4 @@ router.get('/me', authMiddleware, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

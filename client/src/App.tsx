@@ -52,7 +52,7 @@ function App() {
         </Route>
 
         <Route path="user" element={<ProfilePage />}>
-          <Route path=":id">
+          <Route path=":id" element={<ProfilePage />}>
             <Route path="events" element={<UserEvents />} />
             {/* <Route path="past_events" element={<PastEvents />} />
             <Route path="upcoming_events" element={<UpcomingEvents />} /> */}

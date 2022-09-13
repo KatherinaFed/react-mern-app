@@ -15,11 +15,12 @@ export const auth = () => async (dispatch: any) => {
 export const signup =
   (username: string, email: string, password: any) => async () => {
     try {
+      // debugger
       const response = await authAPI.signup({ username, email, password });
 
-      alert(response.data.message);
+      // alert(response.data);
     } catch (e: any) {
-      alert(e.response.data.message);
+      alert(e);
     }
   };
 
@@ -29,8 +30,9 @@ export const login =
       const response = await authAPI.login({ email, password });
       
 
-      dispatch(setUserData(response.user));
-      localStorage.setItem('token', JSON.stringify(response.token));
+      // dispatch(setUserData(response.user));
+      console.log('data user login: ', response)
+      // localStorage.setItem('token', JSON.stringify(response.token));
     } catch (e: any) {
       alert(e);
     }

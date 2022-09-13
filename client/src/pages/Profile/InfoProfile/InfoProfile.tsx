@@ -23,7 +23,7 @@ const InfoProfile = () => {
 
   return (
     <InfoProfileContainer>
-      {/* <Activities>
+      <Activities>
         <div className="navlinks">
           <NavLink
             to="/profile/past_events"
@@ -40,8 +40,8 @@ const InfoProfile = () => {
             <p className="text">Upcoming Events {`(5)`}</p>
           </NavLink>
         </div>
-      </Activities> */}
-      <Outlet />
+      </Activities>
+      {/* <Outlet /> */}
     </InfoProfileContainer>
   );
 };

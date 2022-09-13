@@ -2,4 +2,10 @@
 
 # GET http://localhost:5000/users?page=1&size=10
 
-GET http://localhost:5000/user/1
+GET http://localhost:5000/user/631ee89ac51e5c288575777a
+
+# POST http://localhost:5000/profile/photo
+
+# GET http://localhost:5000/image/afe829a0-ff4e-4c3e-8530-efe676492290
+
+# POST http://localhost:5000/signup

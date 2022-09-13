@@ -2,7 +2,7 @@ import { UserI } from './../users/usersSlice';
 import { createSlice } from '@reduxjs/toolkit';
 
 interface ProfileI {
-  profile: UserI,
+  profile: UserI;
 }
 
 const profileSlice = createSlice({
@@ -15,10 +15,16 @@ const profileSlice = createSlice({
       return {
         ...state,
         profile: action.payload,
-      }
-    }
-  }
+      };
+    },
+    savePhoto(state, action) {
+      return {
+        ...state,
+        profile: { ...state.profile, avatar: action.payload },
+      };
+    },
+  },
 });
 
-export const { setUserProfile } = profileSlice.actions;
+export const { setUserProfile, savePhoto } = profileSlice.actions;
 export default profileSlice.reducer;
