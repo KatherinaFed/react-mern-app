@@ -1,43 +1,54 @@
-import { useState } from 'react';
+import { useFormik } from 'formik';
 import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 import { signup } from '../../store/auth/authThunk';
-import Input from '../Login/Input';
+
+interface SignupI {
+  username: string;
+  email: string;
+  password: string;
+}
 
 const SignupPage: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
   const dispatch = useAppDispatch();
   const { isAuth } = useAppSelector((state) => state.auth);
 
-  const handleClick = () => dispatch(signup(username, email, password));
+  const { handleChange, handleSubmit, values } = useFormik({
+    initialValues: {
+      username: '',
+      email: '',
+      password: '',
+    } as SignupI,
+    onSubmit: (values) => {
+      dispatch(signup(values.username, values.email, values.password));
+    },
+  });
 
   return (
-    <div className="authorization">
+    <form onSubmit={handleSubmit}>
       <div className="authorization__header">Регистрация</div>
-      <Input
-        value={username}
-        setValue={setUsername}
+      <input
+        id="username"
         type="text"
         placeholder="Username..."
+        value={values.username}
+        onChange={handleChange}
       />
-      <Input
-        value={email}
-        setValue={setEmail}
+      <input
+        id="email"
         type="text"
         placeholder="Введите email..."
+        value={values.email}
+        onChange={handleChange}
       />
-      <Input
-        value={password}
-        setValue={setPassword}
+      <input
+        id="password"
         type="password"
         placeholder="Введите пароль..."
+        value={values.password}
+        onChange={handleChange}
       />
-      <button className="authorization__btn" onClick={handleClick}>
-        Зарегистрироваться
-      </button>
-    </div>
+      <button type="submit">Зарегистрироваться</button>
+    </form>
   );
 };
 

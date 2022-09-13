@@ -1,4 +1,5 @@
-import React from 'react';
+import { isEmpty } from 'lodash';
+import { NavLink, Outlet } from 'react-router-dom';
 import {
   Followers,
   FollowersInfo,
@@ -10,7 +11,6 @@ import {
   SidebarProfileContainer,
 } from './styles';
 import userImg from '../../../assets/avatar2.png';
-import { NavLink } from 'react-router-dom';
 import SidebarProfileItem from './SidebarProfileItem/SidebarProfileItem';
 import { sidebarProfileList } from '../../../helpers/itemLists';
 import { useAppSelector } from '../../../hooks/hook';
@@ -27,10 +27,10 @@ type SidebarProfileProps = {
 
 const SidebarProfile = () => {
   const { profile } = useAppSelector((state) => state.profile);
-
-  if (!profile) {
-    return <Preloader />;
-  }
+  console.log('PROFILE SIDEBAR DATA: ', profile);
+  // if (!profile) {
+  //   return <Preloader />;
+  // }
 
   return (
     <SidebarProfileContainer>
@@ -49,14 +49,18 @@ const SidebarProfile = () => {
             {/* тут можно сделать отдельный айтем, в пропсы которых будет приходить количество подписчиков */}
             <Followers>
               <div className="follower-item">
-                <p className="count">{profile.followers.length}</p>
+                <p className="count">
+                  {isEmpty(profile.followers) ? 0 : profile.followers.length}
+                </p>
                 <p className="text">Followers</p>
               </div>
             </Followers>
 
             <Following>
               <div className="following-item">
-                <p className="count">{profile.following.length}</p>
+                <p className="count">
+                  {isEmpty(profile.following) ? 0 : profile.followers.length}
+                </p>
                 <p className="text">Following</p>
               </div>
             </Following>
@@ -65,7 +69,10 @@ const SidebarProfile = () => {
 
         <LinksInfo>
           <Item>
-            <NavLink to={`/user/${profile.id}/events`} style={{ textDecoration: 'none', color: 'black' }}>
+            <NavLink
+              to={`/user/${profile._id}/events`}
+              style={{ textDecoration: 'none', color: 'black' }}
+            >
               <div className="container-link">
                 <p>Events</p>
               </div>

@@ -2,8 +2,9 @@ import pkg from 'mongoose';
 const { Schema, model } = pkg;
 
 const schemaUser = new Schema({
-  id: String,
   username: String,
+  email: String,
+  password: String,
   location: String,
   avatar: String,
   sport: [String],

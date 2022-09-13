@@ -23,8 +23,8 @@ const Friends = () => {
   return (
     <>
       <FriendsWrapper>
-        {users && users.map((item, key) => (
-          <FriendItem {...item} key={key} />
+        {users && users.map((item, i) => (
+          <FriendItem user={item} key={i} />
         ))}
       </FriendsWrapper>
     </>

@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { EventI } from '../events/eventSlice';
 
 export interface UserI {
-  id: number;
+  _id: string;
   username: string;
   location: string;
   avatar: string;

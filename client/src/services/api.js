@@ -3,6 +3,7 @@ import process from 'process';
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
+  withCredentials: true,
   headers: {
     Authorization: `Bearer ${localStorage.getItem('token')}`,
   },
@@ -11,24 +12,24 @@ const instance = axios.create({
 // AUTH
 export const authAPI = {
   isAuth() {
-    return instance
-      .get('auth/me', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      })
-      .then(({ data }) => data);
+    return instance.get('auth/me').then(({ data }) => {
+      console.log('AUTH ME: ', data);
+      return data;
+    });
   },
   signup({ username, email, password }) {
     return instance
-      .post('auth/signup', { username, email, password })
-      .then(({ data }) => data);
+      .post('signup', { username, email, password })
+      .then(({ data }) => {
+        console.log('signup data api: ', data);
+        return data;
+      });
   },
   login({ email, password }) {
-    return instance
-      .post('auth/login', { email, password })
-      .then(({ data }) => data);
+    return instance.post('login', { email, password }).then(({ data }) => data);
   },
   logout() {
-    return instance.delete('auth/login').then(({ data }) => data);
+    return instance.delete('login').then(({ data }) => data);
   },
 };
 
@@ -42,16 +43,32 @@ export const usersAPI = {
       });
   },
   getUserProfile(userId) {
-    return instance.get(`user/${userId}`).then(({ data }) => data);
+    return instance.get(`user/${userId}`).then(({ data }) =>{
+      console.log('getUserProfile DATA: ', data)
+
+      return data
+    });
   },
 };
 
 // PROFILE
-// export const profileAPI = {
-//   getProfile(userId) {
-//     return instance.get(`profile/${userId}`).then(({ data }) => data);
-//   },
-// };
+export const profileAPI = {
+  savePhoto(photoFile) {
+    const formData = new FormData();
+    formData.append('image', photoFile);
+    instance.post('profile/photo', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return instance.post('profile/photo', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  },
+};
 
 // EVENTS
 export const eventsAPI = {
