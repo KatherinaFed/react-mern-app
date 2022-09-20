@@ -1,11 +1,13 @@
 import 'dotenv/config';
 import express from 'express';
 import bcryptjs from 'bcryptjs';
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
 import { v4 as uuidv4 } from 'uuid';
 import User from '../models/User.js';
 import authMiddleware from '../middleware/auth.middleware.js';
+import { generateTokens } from '../utils/generateTokens.js';
+import { verifyRefreshToken } from '../utils/verifyRefreshToken.js';
 
 const router = express.Router();
 
@@ -32,30 +34,31 @@ router.post(
 
       const { username, email, password } = req.body;
 
-      const candidate = await User.findOne({ email });
+      // check if user already exist
+      const existingUser = await User.findOne({ email });
 
-      if (candidate) {
+      if (existingUser) {
         return res
           .status(400)
           .json({ message: `User with email ${email} has already exist` });
       }
 
-      // ID for a new user
-      const userId = uuidv4();
-
+      // encrypt user password
       const hashPassword = await bcryptjs.hash(password, 8);
+
+      // create user in DB
       const newUser = new User({
-        id: userId,
         username,
         email,
         password: hashPassword,
       });
 
-      console.log('NEW USER: ', newUser)
-
+      // save new User
       await newUser.save();
 
-      res.status(201).json({ message: 'User was successfully created!' });
+      res
+        .status(201)
+        .json({ message: 'User was successfully created!', data: newUser });
     } catch (error) {
       res.status(500).json({ message: 'Something went wrong, try again.' });
     }
@@ -82,53 +85,79 @@ router.post(
 
       const { email, password } = req.body;
 
+      // validate if user exists in DB
       const user = await User.findOne({ email });
       if (!user) {
         return res.status(400).json({ message: 'User has not found.' });
       }
-      const isPassMatch = await bcryptjs.compare(password, user.password);
 
+      // user ID
+      const userId = user._id.toString();
+
+      // validate if passwords match
+      const isPassMatch = await bcryptjs.compare(password, user.password);
       if (!isPassMatch) {
         return res.status(400).json({ message: 'Invalid password.' });
       }
 
-      const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
-        expiresIn: '1h',
-      });
+      const { accessToken, refreshToken } = await generateTokens(user);
 
-      res.json({
-        token,
+      res.status(200).json({
         user: {
-          id: user.id,
+          id: userId,
           username: user.username,
           email: user.email,
         },
+        accessToken,
+        refreshToken,
+        message: 'Logged in sucessfully',
       });
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: 'Something went wrong, try again.' });
     }
   }
 );
 
-// IS AUTH
-router.get('/me', authMiddleware, async (req, res) => {
+// LOGOUT
+router.delete('/logout', async (req, res) => {
   try {
-    const user = await User.findOne({ id: req.user.id });
-    const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
-      expiresIn: '1h',
-    });
-    return res.json({
-      token,
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-      },
-    });
-  } catch (e) {
-    console.log(e);
-    res.send({ message: 'Server error' });
+    const userToken = await User.findOne({ token: req.body.refreshToken });
+    if (!userToken)
+      return res
+        .status(200)
+        .json({ error: false, message: 'Logged Out Sucessfully' });
+
+    await userToken.remove();
+    res.status(200).json({ error: false, message: 'Logged Out Sucessfully' });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: true, message: 'Internal Server Error' });
   }
+});
+
+// REFRESH TOKEN
+router.post('/refresh-token', async (req, res) => {
+  verifyRefreshToken(req.body.refreshToken)
+    .then(({ tokenDetails }) => {
+      const accessToken = jwt.sign(
+        { id: tokenDetails._id },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: '2h' }
+      );
+      res.status(200).json({
+        error: false,
+        accessToken,
+        message: 'Access token created successfully',
+      });
+    })
+    .catch((err) => res.status(400).json(err));
+});
+
+// AUTH/ME
+router.get('/welcome', authMiddleware, (req, res) => {
+  // console.log(req.cookies);
+  res.status(200).send('Welcome 🙌 ');
 });
 
 export default router;

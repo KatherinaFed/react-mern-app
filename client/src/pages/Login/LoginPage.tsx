@@ -1,11 +1,12 @@
 import { useFormik } from 'formik';
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Navigate, NavLink } from 'react-router-dom';
 import loginImg from '../../../assets/loginImg.png';
-import { useAppDispatch } from '../../hooks/hook';
+import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 
 import { login } from '../../store/auth/authThunk';
 import Input from './Input';
+import LoginForm from './LoginForm';
 import {
   Form,
   LeftSide,
@@ -20,17 +21,11 @@ interface LoginI {
 }
 
 const LoginPage: React.FC = () => {
-  const dispatch = useAppDispatch();
+  const { isAuth } = useAppSelector((state) => state.auth);
 
-  const { handleChange, handleSubmit, values } = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-    } as LoginI,
-    onSubmit: (values) => {
-      dispatch(login(values.email, values.password));
-    },
-  });
+  if (isAuth) {
+    return <Navigate to="/profile" />;
+  }
 
   return (
     <LoginWrapper>
@@ -42,24 +37,7 @@ const LoginPage: React.FC = () => {
 
           <div className="form-container">
             <div className="header-text">Login</div>
-            <Form onSubmit={handleSubmit}>
-              <input
-                id="email"
-                type="text"
-                placeholder="Email"
-                value={values.email}
-                onChange={handleChange}
-              />
-              <input
-                id="password"
-                type="password"
-                placeholder="Password"
-                value={values.password}
-                onChange={handleChange}
-              />
-
-              <button type="submit">Login</button>
-            </Form>
+            <LoginForm login={login} />
 
             <div className="signup">
               <NavLink style={{ color: 'white' }} to="/signup">

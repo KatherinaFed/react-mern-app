@@ -17,6 +17,12 @@ const profileSlice = createSlice({
         profile: action.payload,
       };
     },
+    updateDataProfile(state, action) {
+      return {
+        ...state,
+        profile: { ...state.profile, props: action.payload },
+      };
+    },
     savePhoto(state, action) {
       return {
         ...state,

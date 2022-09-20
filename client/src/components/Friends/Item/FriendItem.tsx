@@ -16,7 +16,7 @@ import { UserI } from '../../../store/users/usersSlice';
 
 const FriendItem = ({ user }: any) => {
   return (
-    <NavLink to={`/user/${user._id}`} style={{ textDecoration: 'none' }}>
+    <NavLink to={`/profile/${user._id}`} style={{ textDecoration: 'none' }}>
       <FriendItemWrapper>
         <ImageWrapper>
           <img src={user.avatar} alt="" className="img" />

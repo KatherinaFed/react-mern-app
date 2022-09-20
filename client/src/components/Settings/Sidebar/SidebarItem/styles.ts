@@ -19,7 +19,7 @@ export const Item = styled.div<ItemProps>`
       : null}
 
   :hover {
-    background-color: ${palette.lightorange};
+    background-color: ${palette.lighgray};
     border-radius: 0.5rem;
   }
 

@@ -1,3 +1,4 @@
+import { ProfileContainer } from './../../pages/Profile/styles';
 import { profileAPI, usersAPI } from '../../services/api';
 import { savePhoto, setUserProfile } from './profileSlice';
 
@@ -9,15 +10,37 @@ export const getProfileThunk =
     dispatch(setUserProfile(response));
   };
 
-// SAVE PHOTO PROFILE
-export const savePhotoThunk = (file: string | undefined) => async (dispatch: (arg: any) => void) => {
-  try {
-    const response = await profileAPI.savePhoto(file);
+// UPDATE DATA PROFILE
+export const updateProfileThunk =
+  (newProfileData: any) =>
+  async (dispatch: (arg: any) => void, getState: () => any) => {
+    try {
+      // потом переделать в auth.me
+      const userId = getState().profile.profile._id;
 
-    // console.log('RESPONSE PHOTO: ', response)
-    
-    dispatch(savePhoto(response.data.urlPhoto))
-  } catch (error) {
-    console.error(error);
-  }
-};
+      const newData = {
+        id: userId,
+        data: newProfileData
+      };
+      
+      const response = await profileAPI.updateProfileData(newData);
+
+      dispatch(getProfileThunk(userId));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+// SAVE PHOTO PROFILE
+export const savePhotoThunk =
+  (file: string | undefined) => async (dispatch: (arg: any) => void) => {
+    try {
+      const response = await profileAPI.savePhoto(file);
+
+      // console.log('RESPONSE PHOTO: ', response)
+
+      dispatch(savePhoto(response.data.urlPhoto));
+    } catch (error) {
+      console.error(error);
+    }
+  };

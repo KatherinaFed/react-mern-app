@@ -8,13 +8,14 @@ import SidebarProfile from './SidebarProfile.tsx/SidebarProfile';
 import { ProfileContainer } from './styles';
 
 const ProfilePage = () => {
+  const { userId } = useAppSelector((state) => state.auth)
   const dispatch = useAppDispatch();
 
   let id = useParams().id;
 
-  // if (!id) {
-  //   id = userId;
-  // }
+  if (!id) {
+    id = userId;
+  }
 
   useEffect(() => {
     dispatch(getProfileThunk(id));

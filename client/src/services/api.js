@@ -1,6 +1,16 @@
 import * as axios from 'axios';
 import process from 'process';
 
+const authHeader = () => {
+  const userToken = JSON.parse(localStorage.getItem('token'));
+
+  if (userToken) {
+    return { 'x-access-token': userToken };
+  } else {
+    return null;
+  }
+};
+
 const instance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   withCredentials: true,
@@ -9,23 +19,22 @@ const instance = axios.create({
   },
 });
 
+console.log(`Bearer ${localStorage.getItem('token')}`);
+
 // AUTH
 export const authAPI = {
   isAuth() {
     return instance.get('auth/me').then(({ data }) => {
-      console.log('AUTH ME: ', data);
       return data;
     });
   },
   signup({ username, email, password }) {
     return instance
       .post('signup', { username, email, password })
-      .then(({ data }) => {
-        console.log('signup data api: ', data);
-        return data;
-      });
+      .then(({ data }) => data);
   },
   login({ email, password }) {
+    // debugger
     return instance.post('login', { email, password }).then(({ data }) => data);
   },
   logout() {
@@ -43,16 +52,19 @@ export const usersAPI = {
       });
   },
   getUserProfile(userId) {
-    return instance.get(`user/${userId}`).then(({ data }) =>{
-      console.log('getUserProfile DATA: ', data)
+    return instance.get(`profile/${userId}`).then(({ data }) => {
+      // console.log('getUserProfile DATA: ', data);
 
-      return data
+      return data;
     });
   },
 };
 
 // PROFILE
 export const profileAPI = {
+  updateProfileData(newProfileData) {
+    return instance.put('profile', newProfileData);
+  },
   savePhoto(photoFile) {
     const formData = new FormData();
     formData.append('image', photoFile);

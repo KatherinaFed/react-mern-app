@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { isEmpty } from 'lodash';
 import { Button, MainWrapper } from './styles';
 import userImg from '../../assets/userImage.png';
 
@@ -8,6 +9,7 @@ import ModalForm from '../../components/Forms/ModalForm';
 import Modal from '../../components/Modals/Modal';
 import { useAppDispatch, useAppSelector } from '../../hooks/hook';
 import { savePhotoThunk } from '../../store/profile/profileThunk';
+import { Outlet } from 'react-router-dom';
 
 const MainPage: React.FC = () => {
   const [active, setActive] = useState(false);
@@ -34,13 +36,16 @@ const MainPage: React.FC = () => {
           <img className="avatar" alt="profilePhoto" src={profile.avatar} />
         </div>
         <div className="name-wrapper">
-          <h2 className="name">Ekaterina Fedoseeva</h2>
-          <p className="isOnline">online</p>
+          <h2 className="name">{profile.username}</h2>
         </div>
         <div className="info-wrapper-one">
           <div className="info-item">Location: Berlin</div>
-          <div className="info-item">Followers: 2</div>
-          <div className="info-item">Following: 5</div>
+          <div className="info-item">{`Followers: ${
+            isEmpty(profile.followers) ? 0 : profile.followers.length
+          }`}</div>
+          <div className="info-item">{`Following: ${
+            isEmpty(profile.following) ? 0 : profile.following.length
+          }`}</div>
         </div>
         <div className="info-wrapper-two">
           <div className="info-item">Events: 2</div>
@@ -57,6 +62,7 @@ const MainPage: React.FC = () => {
         </div>
       </MainWrapper>
       <LayoutRouting />
+      <Outlet />
     </>
   );
 };

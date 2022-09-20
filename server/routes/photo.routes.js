@@ -1,63 +1,47 @@
 import express from 'express';
-import multer from 'multer';
-import Photo from '../models/Photo';
+import streamifier from 'streamifier';
+import { v4 as uuidv4 } from 'uuid';
+
 const Router = express.Router();
 
-const upload = multer({
-  limits: {
-    fileSize: 1000000, // max file size 1MB = 1000000 bytes
-  },
-  fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(jpeg|jpg)$/)) {
-      cb(new Error('only upload files with jpg or jpeg format.'));
-    }
-    cb(undefined, true); // continue with upload
-  },
-});
+// GET PHOTO
+router.get('/:uuid', async (req, res) => {
+  let id = req.params.uuid;
+  res.setHeader('Content-disposition', 'attachment; filename=' + id);
 
-Router.post(
-  '/profile/photo',
-  upload.single('photo'),
-  async (req, res) => {
-    try {
-      const photo = new Photo(req.body);
-      const file = req.file.buffer;
-      photo.photo = file;
-
-      await photo.save();
-      res.status(201).send({ _id: photo._id });
-    } catch (error) {
-      res.status(500).send({
-        upload_error: 'Error while uploading file...Try again later.',
+  bucket
+    .openDownloadStreamByName(id)
+    .pipe(res)
+    .on('error', function (error) {
+      console.log('error' + error);
+      res.status(404).json({
+        msg: error.message,
       });
-    }
-  },
-  (error, req, res, next) => {
-    if (error) {
-      res.status(500).send({
-        upload_error: error.message,
+    })
+    .on('finish', function () {
+      console.log('GET done!');
+    });
+});
+
+// POST PHOTO
+router.post('/', async (req, res) => {
+  const uuid = uuidv4();
+
+  const stream = bucket.openUploadStream(uuid);
+
+  streamifier
+    .createReadStream(req.files.image.data)
+    .pipe(stream)
+    .on('error', function (error) {
+      assert.ifError(error);
+    })
+    .on('finish', function () {
+      console.log('POST done!');
+
+      res.status(200).json({
+        urlPhoto: `${process.env.URL_PORT}image/${uuid}`,
       });
-    }
-  }
-);
-
-Router.get('/profile/photo', async (req, res) => {
-  try {
-    const photos = await Photo.find({});
-    res.send(photos);
-  } catch (error) {
-    res.status(500).send({ get_error: 'Error while getting list of photos.' });
-  }
+    });
 });
 
-Router.get('/profile/photo/:id', async (req, res) => {
-  try {
-    const result = await Photo.findById(req.params.id);
-    res.set('Content-Type', 'image/jpeg');
-    res.send(result.photo);
-  } catch (error) {
-    res.status(400).send({ get_error: 'Error while getting photo.' });
-  }
-});
-
-module.exports = Router;
+export default router;

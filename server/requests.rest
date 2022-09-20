@@ -2,10 +2,44 @@
 
 # GET http://localhost:5000/users?page=1&size=10
 
-GET http://localhost:5000/user/631ee89ac51e5c288575777a
+# GET http://localhost:5000/user/631ee89ac51e5c288575777a
 
 # POST http://localhost:5000/profile/photo
 
 # GET http://localhost:5000/image/afe829a0-ff4e-4c3e-8530-efe676492290
 
 # POST http://localhost:5000/signup
+# Content-Type: application/json
+
+# {
+#   "username": "John Doe",
+#   "email": "john@gmail.com",
+#   "password": "johnadmin"
+# }
+
+# PUT http://localhost:5000/profile
+
+# GET http://localhost:5000/welcome
+
+
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+  "email": "john@gmail.com",
+  "password": "johnadmin"
+}
+
+# POST http://localhost:5000/refresh-token
+# Content-Type: application/json
+
+# {
+#   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjliNWMzMDgwMmM2ZTg4NjQzZjI0OSIsImlhdCI6MTY2MzY3Nzk0OSwiZXhwIjoxNjYzNzY0MzQ5fQ.awZDcPRK2l1PMThNADe5uSezrqWmH9DGVwxHPOlkQ0k"
+# }
+
+# DELETE http://localhost:5000/logout
+# Content-Type: application/json
+
+# {
+#   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjliNWMzMDgwMmM2ZTg4NjQzZjI0OSIsImlhdCI6MTY2MzY3Nzk0OSwiZXhwIjoxNjYzNzY0MzQ5fQ.awZDcPRK2l1PMThNADe5uSezrqWmH9DGVwxHPOlkQ0k"
+# }
