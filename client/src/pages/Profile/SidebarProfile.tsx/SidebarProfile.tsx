@@ -14,7 +14,7 @@ import userImg from '../../../assets/avatar2.png';
 import SidebarProfileItem from './SidebarProfileItem/SidebarProfileItem';
 import { sidebarProfileList } from '../../../helpers/itemLists';
 import { useAppSelector } from '../../../hooks/hook';
-import Preloader from '../../../components/Preloader';
+import Preloader from '../../../components/Preloader/Preloader';
 
 type SidebarProfileProps = {
   id: string;
@@ -27,10 +27,6 @@ type SidebarProfileProps = {
 
 const SidebarProfile = () => {
   const { profile } = useAppSelector((state) => state.profile);
-  console.log('PROFILE SIDEBAR DATA: ', profile);
-  // if (!profile) {
-  //   return <Preloader />;
-  // }
 
   return (
     <SidebarProfileContainer>
@@ -40,7 +36,9 @@ const SidebarProfile = () => {
             <img className="avatar" alt="profilePhoto" src={userImg} />
           </div>
           <div className="name-wrapper">
-            <p>{profile.username}</p>
+            <p>
+              {profile.username}
+            </p>
           </div>
         </ProfileInfo>
 
@@ -70,7 +68,7 @@ const SidebarProfile = () => {
         <LinksInfo>
           <Item>
             <NavLink
-              to={`/user/${profile._id}/events`}
+              to={`/user/${profile.id}/events`}
               style={{ textDecoration: 'none', color: 'black' }}
             >
               <div className="container-link">

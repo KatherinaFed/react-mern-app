@@ -41,6 +41,13 @@ export const AvatarContainer = styled.div`
     padding: 6px 12px;
     font-size: 16px;
     cursor: pointer;
+
+    :hover {
+      outline: none !important;
+      background-color: ${palette.lightorange};
+      border: 1px solid ${palette.orange};
+      box-shadow: 0 0 10px ${palette.lighgray};
+    }
   }
 
   input {
@@ -51,36 +58,6 @@ export const AvatarContainer = styled.div`
 export const FormGroup = styled.form`
   display: grid;
   gap: 1.5rem;
-`;
-
-export const Username = styled.div`
-  display: grid;
-  grid-template-rows: repeat(2, auto);
-  flex-direction: column;
-  gap: 0.5rem;
-
-  .label-username {
-    grid-row: 1;
-    margin: 10px 10px 10px 0;
-    font-size: 18px;
-    font-weight: 500;
-  }
-
-  input {
-    grid-row: 2;
-    font-size: 18px;
-    font-weight: 300;
-    padding: 10px;
-
-    border: 1px solid gray;
-    background-color: white;
-    border-radius: 0.5rem;
-    :focus {
-      outline: none !important;
-      border: 1px solid ${palette.orange};
-      box-shadow: 0 0 10px ${palette.lighgray};
-    }
-  }
 `;
 
 export const Website = styled.div`

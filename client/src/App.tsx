@@ -25,37 +25,45 @@ import UpcomingEvents from './pages/Profile/InfoProfile/ProfileEvents/Upcoming/U
 import UserProfile from './components/Users/UserProfile';
 import Users from './components/Users/Users';
 import UserEvents from './components/Users/UserEvents';
+import { useAppDispatch, useAppSelector } from './hooks/hook';
+import { useEffect } from 'react';
+import { initApp } from './store/app/appThunk';
+import Preloader from './components/Preloader/Preloader';
 
 function App() {
-  // const { isAuth } = useAppSelector((state) => state.auth);
-  // const dispatch = useAppDispatch();
-  // console.log(isAuth);
+  const { initialized } = useAppSelector((state) => state.app);
+  const dispatch = useAppDispatch();
 
   // useEffect(() => {
-  //   dispatch(auth());
+  //   dispatch(initApp());
   // }, [dispatch]);
+
+  // if (!initialized) {
+  //   return <Preloader />;
+  // }
 
   return (
     <AppWrapper>
+      {/* сделать проверку на авторизованного пользователя */}
       <Header />
       <Routes>
-        <Route path="/" element={<MainPage />} />
-
-        <Route path="events" element={<MainPage />}>
-          <Route path="all-events" element={<AllEvents />} />
-          <Route path="my-events" element={<MyEvents />} />
-        </Route>
-
         <Route path="/" element={<MainPage />}>
+          {/* <Route path="all-events" element={<AllEvents />} />
+          <Route path="my-events" element={<MyEvents />} /> */}
+
+          <Route path="events">
+            <Route path="all-events" element={<AllEvents />} />
+            <Route path="my-events" element={<MyEvents />} />
+          </Route>
           <Route path="friends" element={<Friends />} />
           <Route path="users" element={<Users />} />
         </Route>
 
-        <Route path="user" element={<ProfilePage />}>
+        <Route path="profile" element={<ProfilePage />}>
           <Route path=":id" element={<ProfilePage />}>
             <Route path="events" element={<UserEvents />} />
-            {/* <Route path="past_events" element={<PastEvents />} />
-            <Route path="upcoming_events" element={<UpcomingEvents />} /> */}
+            <Route path="past_events" element={<PastEvents />} />
+            <Route path="upcoming_events" element={<UpcomingEvents />} />
           </Route>
         </Route>
 
@@ -79,9 +87,7 @@ export const RunApp = () => {
   return (
     <BrowserRouter>
       <Provider store={store}>
-        <ModalProvider>
-          <App />
-        </ModalProvider>
+        <App />
       </Provider>
     </BrowserRouter>
   );

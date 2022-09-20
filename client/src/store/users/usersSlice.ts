@@ -2,8 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 import { EventI } from '../events/eventSlice';
 
 export interface UserI {
-  _id: string;
+  id: string;
   username: string;
+  firstname: string;
+  lastname: string;
   location: string;
   avatar: string;
   sport: string[];

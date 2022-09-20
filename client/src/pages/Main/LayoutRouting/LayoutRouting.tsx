@@ -55,7 +55,6 @@ const LayoutRouting: React.FC = () => {
             <p className="text">Users</p>
           </NavLink>
         </div>
-        {/* {isFriends && <Outlet />} */}
       </LayoutWrapper>
 
       {!isFriends && !isUsers ? (
@@ -84,7 +83,6 @@ const LayoutRouting: React.FC = () => {
           </div>
         </LinksWrapper>
       ) : null}
-      <Outlet />
     </>
   );
 };

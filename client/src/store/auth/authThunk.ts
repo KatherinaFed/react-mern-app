@@ -3,10 +3,12 @@ import { authAPI } from '../../services/api';
 
 export const auth = () => async (dispatch: any) => {
   try {
-    const response = await authAPI.isAuth();
+    // debugger
+    const response = await authAPI.isAuth(); // undefined
+    console.log('AUTH response thunk: ', response);
 
-    dispatch(setUserData(response));
-    localStorage.setItem('token', response.data.token);
+    dispatch(setUserData(response.user));
+    localStorage.setItem('token', response.token);
   } catch (error) {
     localStorage.removeItem('token');
   }
@@ -15,10 +17,17 @@ export const auth = () => async (dispatch: any) => {
 export const signup =
   (username: string, email: string, password: any) => async () => {
     try {
-      // debugger
-      const response = await authAPI.signup({ username, email, password });
+      const response = await authAPI.signup({
+        username,
+        email,
+        password,
+      });
 
-      // alert(response.data);
+      if (response.data.token) {
+        localStorage.setItem('user', JSON.stringify(response.data));
+      } else {
+        console.log('no response');
+      }
     } catch (e: any) {
       alert(e);
     }
@@ -28,10 +37,8 @@ export const login =
   (email: string, password: any) => async (dispatch: any) => {
     try {
       const response = await authAPI.login({ email, password });
-      
 
-      // dispatch(setUserData(response.user));
-      console.log('data user login: ', response)
+      dispatch(setUserData(response.user));
       // localStorage.setItem('token', JSON.stringify(response.token));
     } catch (e: any) {
       alert(e);
@@ -42,5 +49,5 @@ export const logout = () => async (dispatch: any) => {
   await authAPI.logout();
   localStorage.removeItem('token');
 
-  dispatch(setUserData({ userId: '', username: '', email: '', isAuth: false }));
+  dispatch(setUserData({ userId: '', email: '', username: '', isAuth: false }));
 };

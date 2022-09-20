@@ -2,8 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface Auth {
   userId: string;
-  username: string;
   email: string;
+  username: string;
   isAuth: boolean;
 }
 
@@ -11,19 +11,20 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: {
     userId: '',
-    username: '',
     email: '',
+    username: '',
     isAuth: false,
   } as Auth,
   reducers: {
-    setUserData(state, action: PayloadAction<Auth>) {
-      const { userId, username, email } = action.payload;
+    setUserData(state, action) {
+      const { id, email, username } = action.payload;
+      console.log('AUTH SLICE PAYLOAD: ', action.payload)
 
       return {
         ...state,
-        userId,
-        username,
+        userId: id,
         email,
+        username,
         isAuth: true,
       };
     },
