@@ -1,53 +1,72 @@
 import { setUserData } from './authSlice';
 import { authAPI } from '../../services/api';
+import useAuth from '../../hooks/useAuth';
+import axios from 'axios';
 
 export const auth = () => async (dispatch: any) => {
   try {
-    // debugger
-    const response = await authAPI.isAuth(); // undefined
-    console.log('AUTH response thunk: ', response);
+   const access = JSON.parse(localStorage.getItem('tokens') || '{}')?.accessToken;
 
-    dispatch(setUserData(response.user));
-    localStorage.setItem('token', response.token);
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}auth/me`,
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      }
+    );
+    // console.log('AUTH access: ', JSON.parse(localStorage.getItem('tokens') || '{}')?.accessToken);
+    // console.log('AUTH refresh: ', JSON.parse(localStorage.getItem('tokens') || '{}')?.refreshToken);
+
+    if (response.status === 200) {
+      dispatch(
+        setUserData({
+          userId: response.data.user.id,
+          email: response.data.user.email,
+          username: response.data.user.username,
+          isAuth: true,
+        })
+      );
+    }
   } catch (error) {
-    localStorage.removeItem('token');
+    localStorage.removeItem('tokens');
   }
 };
+
 
 export const signup =
   (username: string, email: string, password: any) => async () => {
     try {
-      const response = await authAPI.signup({
+      await authAPI.signup({
         username,
         email,
         password,
       });
-
-      if (response.data.token) {
-        localStorage.setItem('user', JSON.stringify(response.data));
-      } else {
-        console.log('no response');
-      }
     } catch (e: any) {
       alert(e);
     }
   };
 
-export const login =
-  (email: string, password: any) => async (dispatch: any) => {
-    try {
-      const response = await authAPI.login({ email, password });
+// export const login =
+//   (email: string, password: any) => async (dispatch: any) => {
+//     try {
+//       const response = await authAPI.login({
+//         email,
+//         password,
+//       });
 
-      dispatch(setUserData(response.user));
-      // localStorage.setItem('token', JSON.stringify(response.token));
-    } catch (e: any) {
-      alert(e);
-    }
-  };
+//       if (response.message === 'Logged in successfully!') {
+//         dispatch(auth());
+//       }
+//     } catch (e: any) {
+//       alert(e);
+//     }
+//   };
 
-export const logout = () => async (dispatch: any) => {
-  await authAPI.logout();
-  localStorage.removeItem('token');
+// export const logout = () => async (dispatch: any) => {
+//   await authAPI.logout();
+//   localStorage.removeItem('token');
 
-  dispatch(setUserData({ userId: '', email: '', username: '', isAuth: false }));
-};
+//   dispatch(setUserData({ userId: '', email: '', username: '', isAuth: false }));
+// };

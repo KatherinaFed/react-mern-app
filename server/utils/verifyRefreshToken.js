@@ -2,8 +2,9 @@ import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 
 export const verifyRefreshToken = (refreshToken) => {
+  
   return new Promise((resolve, reject) => {
-    User.findOne({ token: refreshToken }, (err, doc) => {
+    User.findOne({ refreshToken }, (err, doc) => {
       if (!doc)
         return reject({ error: true, message: 'Invalid refresh token' });
 

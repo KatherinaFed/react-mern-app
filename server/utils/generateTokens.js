@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
 
 export const generateTokens = async (user) => {
   const userId = user._id.toString();
@@ -8,18 +7,18 @@ export const generateTokens = async (user) => {
       { id: userId, email: user.email },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: '2h',
+        expiresIn: process.env.ACCESS_TOKEN_EXPIRES_TIME,
       }
     );
     const refreshToken = jwt.sign(
       { id: userId, email: user.email },
       process.env.REFRESH_TOKEN_SECRET,
       {
-        expiresIn: '1d',
+        expiresIn: process.env.REFRESH_TOKEN_EXPIRES_TIME,
       }
     );
 
-    user.token = refreshToken;
+    // user.token = accessToken;
 
     return Promise.resolve({ accessToken, refreshToken });
   } catch (error) {

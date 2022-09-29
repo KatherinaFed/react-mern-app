@@ -5,7 +5,7 @@ import User from '../models/User.js';
 const router = express.Router();
 
 // GET ALL USERS
-app.get('/', paginatedResult(User), (req, res) => {
+router.get('/', paginatedResult(User), (req, res) => {
   res.json(res.paginatedResults);
 });
 

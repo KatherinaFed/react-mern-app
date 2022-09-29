@@ -22,19 +22,22 @@
 # GET http://localhost:5000/welcome
 
 
-POST http://localhost:5000/login
-Content-Type: application/json
+# POST http://localhost:5000/api/auth/login
+# Content-Type: application/json
 
-{
-  "email": "john@gmail.com",
-  "password": "johnadmin"
-}
+# {
+#   "email": "john@gmail.com",
+#   "password": "johnadmin"
+# }
+
+# GET http://localhost:5000/api/auth/me
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjliYjE3OGEyM2UzMmM0YTg3NDAzYiIsImVtYWlsIjoiam9obkBnbWFpbC5jb20iLCJpYXQiOjE2NjM5MzE1NDgsImV4cCI6MTY2MzkzMjQ0OH0.iwG2Yab0x4_KxvdYdAeK3qLmm8x6bUcQ-Iv60xf5i6U
 
 # POST http://localhost:5000/refresh-token
 # Content-Type: application/json
 
 # {
-#   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjliNWMzMDgwMmM2ZTg4NjQzZjI0OSIsImlhdCI6MTY2MzY3Nzk0OSwiZXhwIjoxNjYzNzY0MzQ5fQ.awZDcPRK2l1PMThNADe5uSezrqWmH9DGVwxHPOlkQ0k"
+#   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMjliYjE3OGEyM2UzMmM0YTg3NDAzYiIsImVtYWlsIjoiam9obkBnbWFpbC5jb20iLCJpYXQiOjE2NjM5MzI3NzgsImV4cCI6MTY2NDAxOTE3OH0.toX9f1Htf88XH56NhDqeltY_SKBxwq0OQwLsMqtHFv4"
 # }
 
 # DELETE http://localhost:5000/logout

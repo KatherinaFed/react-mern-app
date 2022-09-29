@@ -3,7 +3,6 @@ import express from 'express';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator';
-import { v4 as uuidv4 } from 'uuid';
 import User from '../models/User.js';
 import authMiddleware from '../middleware/auth.middleware.js';
 import { generateTokens } from '../utils/generateTokens.js';
@@ -100,6 +99,7 @@ router.post(
         return res.status(400).json({ message: 'Invalid password.' });
       }
 
+      // generate TOKENS
       const { accessToken, refreshToken } = await generateTokens(user);
 
       res.status(200).json({
@@ -110,7 +110,8 @@ router.post(
         },
         accessToken,
         refreshToken,
-        message: 'Logged in sucessfully',
+        status: 'OK',
+        message: 'Logged in successfully!',
       });
     } catch (error) {
       console.log(error);
@@ -137,14 +138,17 @@ router.delete('/logout', async (req, res) => {
 });
 
 // REFRESH TOKEN
-router.post('/refresh-token', async (req, res) => {
-  verifyRefreshToken(req.body.refreshToken)
+router.post('/token', async (req, res) => {
+  const { refreshToken } = req.body;
+
+  verifyRefreshToken(refreshToken)
     .then(({ tokenDetails }) => {
       const accessToken = jwt.sign(
-        { id: tokenDetails._id },
+        { id: tokenDetails.id },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '2h' }
+        { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_TIME }
       );
+
       res.status(200).json({
         error: false,
         accessToken,
@@ -155,9 +159,26 @@ router.post('/refresh-token', async (req, res) => {
 });
 
 // AUTH/ME
-router.get('/welcome', authMiddleware, (req, res) => {
-  // console.log(req.cookies);
-  res.status(200).send('Welcome 🙌 ');
+router.get('/me', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    // generate TOKENS
+    const { accessToken, refreshToken } = await generateTokens(user);
+
+    res.status(200).json({
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      },
+      accessToken,
+      refreshToken,
+      message: 'Welcome 🙌',
+    });
+  } catch (error) {
+    console.log(error);
+    res.send({ message: 'Server error' });
+  }
 });
 
 export default router;

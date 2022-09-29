@@ -2,7 +2,7 @@ import express from 'express';
 import streamifier from 'streamifier';
 import { v4 as uuidv4 } from 'uuid';
 
-const Router = express.Router();
+const router = express.Router();
 
 // GET PHOTO
 router.get('/:uuid', async (req, res) => {

@@ -12,10 +12,12 @@ import {
 import { Avatar } from '@mui/material';
 import { Svg } from './svg';
 import { useAppSelector } from '../../hooks/hook';
+import useAuth from '../../hooks/useAuth';
 
 const Header = () => {
   const { isAuth, username } = useAppSelector((state) => state.auth);
-  console.log('isAuth header: ', isAuth)
+  const { token } = useAuth();
+  // console.log('HEADER token: ', token)
   return (
     <HeaderWrapper>
       <TextWrapper>
@@ -27,7 +29,7 @@ const Header = () => {
         <Svg />
         <SearchInput />
       </SearchWrapper>
-      {isAuth ? (
+      {token ? (
         <InfoWrapper>
           <Avatar sx={{ p: '10px', mr: '10px' }} />
           <StyledLink to="/profile">

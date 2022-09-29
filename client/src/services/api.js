@@ -1,16 +1,6 @@
 import * as axios from 'axios';
 import process from 'process';
 
-const authHeader = () => {
-  const userToken = JSON.parse(localStorage.getItem('token'));
-
-  if (userToken) {
-    return { 'x-access-token': userToken };
-  } else {
-    return null;
-  }
-};
-
 const instance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   withCredentials: true,
@@ -19,7 +9,7 @@ const instance = axios.create({
   },
 });
 
-console.log(`Bearer ${localStorage.getItem('token')}`);
+// console.log(`Bearer ${JSON.parse(localStorage.getItem('tokens') || '{}')?.accessToken}`);
 
 // AUTH
 export const authAPI = {
@@ -30,15 +20,19 @@ export const authAPI = {
   },
   signup({ username, email, password }) {
     return instance
-      .post('signup', { username, email, password })
+      .post('auth/signup', { username, email, password })
       .then(({ data }) => data);
   },
   login({ email, password }) {
-    // debugger
-    return instance.post('login', { email, password }).then(({ data }) => data);
+    return instance
+      .post('auth/login', { email, password })
+      .then(({ data }) => data);
   },
   logout() {
-    return instance.delete('login').then(({ data }) => data);
+    return instance.delete('auth/logout').then(({ data }) => data);
+  },
+  refreshToken({ token }) {
+    return instance.post('auth/token', { token }).then(({ data }) => data);
   },
 };
 
