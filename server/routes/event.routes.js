@@ -1,6 +1,6 @@
 import express from 'express';
 import { paginatedResult } from '../middleware/pagination.middleware.js';
-import Events from '../models/Event.js';
+import Event from '../models/Event.js';
 
 const router = express.Router();
 

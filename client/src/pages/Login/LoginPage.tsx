@@ -1,10 +1,6 @@
-import { useFormik } from 'formik';
-import { useState } from 'react';
 import { Navigate, NavLink } from 'react-router-dom';
-import loginImg from '../../../assets/loginImg.png';
-import { useAppDispatch, useAppSelector } from '../../hooks/hook';
+import { useAppSelector } from '../../hooks/hook';
 
-import { login } from '../../store/auth/authThunk';
 import Input from './Input';
 import LoginForm from './LoginForm';
 import {
@@ -24,7 +20,7 @@ const LoginPage: React.FC = () => {
   const { isAuth } = useAppSelector((state) => state.auth);
 
   if (isAuth) {
-    return <Navigate to="/profile" />;
+    return <Navigate to='/' />;
   }
 
   return (
@@ -37,7 +33,8 @@ const LoginPage: React.FC = () => {
 
           <div className="form-container">
             <div className="header-text">Login</div>
-            <LoginForm login={login} />
+            {/* <LoginForm login={login} /> */}
+            <LoginForm />
 
             <div className="signup">
               <NavLink style={{ color: 'white' }} to="/signup">

@@ -17,15 +17,14 @@ const authSlice = createSlice({
   } as Auth,
   reducers: {
     setUserData(state, action) {
-      const { id, email, username } = action.payload;
-      console.log('AUTH SLICE PAYLOAD: ', action.payload)
+      const { userId, email, username, isAuth } = action.payload;
 
       return {
         ...state,
-        userId: id,
+        userId,
         email,
         username,
-        isAuth: true,
+        isAuth,
       };
     },
   },

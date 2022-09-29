@@ -79,8 +79,8 @@ const SidebarProfile = () => {
         </LinksInfo>
 
         <FooterInfo>
-          {sidebarProfileList.map(({ id, name, link, icon }) => (
-            <SidebarProfileItem id={id} name={name} link={link} icon={icon} />
+          {sidebarProfileList.map(({ name, link, icon }) => (
+            <SidebarProfileItem name={name} link={link} icon={icon} />
           ))}
         </FooterInfo>
       </div>

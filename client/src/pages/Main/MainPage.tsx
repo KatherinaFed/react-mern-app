@@ -14,6 +14,7 @@ import { Outlet } from 'react-router-dom';
 const MainPage: React.FC = () => {
   const [active, setActive] = useState(false);
   const { profile } = useAppSelector((state) => state.profile);
+  const { username } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const selectMyPhoto = (e: any) => {
@@ -36,7 +37,7 @@ const MainPage: React.FC = () => {
           <img className="avatar" alt="profilePhoto" src={profile.avatar} />
         </div>
         <div className="name-wrapper">
-          <h2 className="name">{profile.username}</h2>
+          <h2 className="name">{profile.username || username}</h2>
         </div>
         <div className="info-wrapper-one">
           <div className="info-item">Location: Berlin</div>

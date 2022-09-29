@@ -5,4 +5,6 @@ function cors(req, res, next) {
   next();
 }
 
-module.exports = cors;
+
+export default cors;
+// module.exports = cors;
